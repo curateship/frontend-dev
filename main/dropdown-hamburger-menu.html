@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.getElementsByTagName("html")[0].className += " js";</script>
+  <link id="codyframe" rel="stylesheet" href="assets/css/style.css">
+  <!-- Uncomment the script below if you need to support browsers where CSS Variables have not been implemented (e.g., IE11) -->
+  <!-- <script>
+    if(!('CSS' in window) || !CSS.supports('color', 'var(--color-var)')) {var cfStyle = document.getElementById('codyframe');if(cfStyle) {var href = cfStyle.getAttribute('href');href = href.replace('style.css', 'style-fallback.css');cfStyle.setAttribute('href', href);}}
+  </script> -->
+  <title>Get Started | CodyFrame</title>
+</head>
+<body>
+  
+  <button class="reset anim-menu-btn bg-contrast-higher color-bg radius-50% js-anim-menu-btn js-tab-focus" style="--anim-menu-btn-icon-size: 24px;" aria-label="Toggle menu" aria-controls="drop-menu-id">
+    <i class="anim-menu-btn__icon anim-menu-btn__icon--close" aria-hidden="true"></i>
+  </button>
+  
+  <div class="drop-menu text-sm@md js-drop-menu js-autocomplete" id="drop-menu-id" data-autocomplete-dropdown-visible-class="drop-menu--searching">
+    <div class="drop-menu__inner js-drop-menu__inner">
+      <!-- menu -->
+      <ul class="drop-menu__list js-drop-menu__list js-drop-menu__list--main">
+        <li class="drop-menu__search-item">
+          <div class="drop-menu__search">
+            <input class="reset drop-menu__search-input js-autocomplete__input" type="search" placeholder="Search...">
+    
+            <svg class="icon drop-menu__search-icon" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="6.5" cy="6.5" r="4.5" /><line x1="14" y1="14" x2="9.682" y2="9.682" /></g></svg>
+          </div>
+        </li>
+    
+        <li>
+          <button class="reset drop-menu__btn js-drop-menu__btn--sublist-control">
+            <span>Books</span>
+    
+            <svg class="icon icon--xxs margin-left-xxs" viewBox="0 0 12 12"><path d="M10.745,5.564l-8-4.5A.5.5,0,0,0,2,1.5v9a.5.5,0,0,0,.248.432.5.5,0,0,0,.5,0l8-4.5a.5.5,0,0,0,0-.872Z"/></svg>
+          </button>
+    
+          <ul class="drop-menu__list js-drop-menu__list">
+            <li>
+              <button class="reset drop-menu__btn js-drop-menu__btn--back">
+                <svg class="icon icon--xxs flip-x margin-right-xxs" viewBox="0 0 12 12"><path d="M10.745,5.564l-8-4.5A.5.5,0,0,0,2,1.5v9a.5.5,0,0,0,.248.432.5.5,0,0,0,.5,0l8-4.5a.5.5,0,0,0,0-.872Z"/></svg>
+                <span class="margin-right-auto">Back</span>
+              </button>
+            </li>
+    
+            <li><a class="drop-menu__link" href="#0">All Books</a></li>
+            <li><a class="drop-menu__link" href="#0">Children's Books</a></li>
+            <li><a class="drop-menu__link" href="#0">Crime &amp; Mistery</a></li>
+  
+            <li>
+              <button class="reset drop-menu__btn js-drop-menu__btn--sublist-control">
+                <span>Food &amp; Drink</span>
+        
+                <svg class="icon icon--xxs margin-left-xxs" viewBox="0 0 12 12"><path d="M10.745,5.564l-8-4.5A.5.5,0,0,0,2,1.5v9a.5.5,0,0,0,.248.432.5.5,0,0,0,.5,0l8-4.5a.5.5,0,0,0,0-.872Z"/></svg>
+              </button>
+  
+              <ul class="drop-menu__list js-drop-menu__list">
+                <li>
+                  <button class="reset drop-menu__btn js-drop-menu__btn--back">
+                    <svg class="icon icon--xxs flip-x margin-right-xxs" viewBox="0 0 12 12"><path d="M10.745,5.564l-8-4.5A.5.5,0,0,0,2,1.5v9a.5.5,0,0,0,.248.432.5.5,0,0,0,.5,0l8-4.5a.5.5,0,0,0,0-.872Z"/></svg>
+                    <span class="margin-right-auto">Back</span>
+                  </button>
+                </li>
+  
+                <li><a class="drop-menu__link" href="#0">Diets</a></li>
+                <li><a class="drop-menu__link" href="#0">Meals &amp; Menus</a></li>
+                <li><a class="drop-menu__link" href="#0">Desserts</a></li>
+              </ul>
+            </li>
+  
+            <li><a class="drop-menu__link" href="#0">History</a></li>
+          </ul>
+        </li>
+    
+        <li>
+          <button class="reset drop-menu__btn js-drop-menu__btn--sublist-control">
+            <span>Electronics</span>
+    
+            <svg class="icon icon--xxs margin-left-xxs" viewBox="0 0 12 12"><path d="M10.745,5.564l-8-4.5A.5.5,0,0,0,2,1.5v9a.5.5,0,0,0,.248.432.5.5,0,0,0,.5,0l8-4.5a.5.5,0,0,0,0-.872Z"/></svg>
+          </button>
+  
+          <ul class="drop-menu__list js-drop-menu__list">
+            <li>
+              <button class="reset drop-menu__btn js-drop-menu__btn--back">
+                <svg class="icon icon--xxs flip-x margin-right-xxs" viewBox="0 0 12 12"><path d="M10.745,5.564l-8-4.5A.5.5,0,0,0,2,1.5v9a.5.5,0,0,0,.248.432.5.5,0,0,0,.5,0l8-4.5a.5.5,0,0,0,0-.872Z"/></svg>
+                <span class="margin-right-auto">Back</span>
+              </button>
+            </li>
+    
+            <li><a class="drop-menu__link" href="#0">Camera &amp; Photo</a></li>
+            <li><a class="drop-menu__link" href="#0">TV</a></li>
+            <li><a class="drop-menu__link" href="#0">Audio</a></li>
+            <li><a class="drop-menu__link" href="#0">Headphones</a></li>
+            <li><a class="drop-menu__link" href="#0">Phones</a></li>
+            <li><a class="drop-menu__link" href="#0">Video Games</a></li>
+          </ul>
+        </li>
+  
+        <li><a class="drop-menu__link" href="#0">Home &amp; Garden</a></li>
+        <li><a class="drop-menu__link" href="#0">Toys</a></li>
+        <li><a class="drop-menu__link" href="#0">Clothes</a></li>
+        <li><a class="drop-menu__link" href="#0">Health &amp; Beauty</a></li>
+        <li><a class="drop-menu__link" href="#0">Car &amp; Motorbike</a></li>
+        <li><a class="drop-menu__link" href="#0">Sports</a></li>
+      </ul>
+  
+      <!-- search results -->
+      <div class="drop-menu__search-list js-autocomplete__results">
+        <ul id="autocomplete1" class="js-autocomplete__list">
+          <li class="autocomplete__item js-autocomplete__item is-hidden"><a class="drop-menu__link" data-autocomplete-url data-autocomplete-label></a></li>
+        </ul>
+      </div>
+    </div>
+  
+    <!-- close button - mobile only -->
+    <button class="reset drop-menu__close-btn js-drop-menu__close-btn js-tab-focus">
+      <svg class="icon icon--xs margin-right-xxxs" viewBox="0 0 16 16" aria-hidden="true"><g stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"><line x1="13.5" y1="2.5" x2="2.5" y2="13.5"></line><line x1="2.5" y1="2.5" x2="13.5" y2="13.5"></line></g></svg>
+  
+      <span>Close Menu</span>
+    </button>
+  </div>
+<script src="assets/js/scripts.js"></script>
+</body>
+</html>
