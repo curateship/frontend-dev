@@ -448,6 +448,343 @@ function resetFocusTabsStyle() {
       }
     };
   }());
+// File#: _1_hiding-nav
+// Usage: codyhouse.co/license
+(function() {
+  var hidingNav = document.getElementsByClassName('js-hide-nav');
+  if(hidingNav.length > 0 && window.requestAnimationFrame) {
+    var mainNav = Array.prototype.filter.call(hidingNav, function(element) {
+      return Util.hasClass(element, 'js-hide-nav--main');
+    }),
+    subNav = Array.prototype.filter.call(hidingNav, function(element) {
+      return Util.hasClass(element, 'js-hide-nav--sub');
+    });
+    
+    var scrolling = false,
+      previousTop = window.scrollY,
+      currentTop = window.scrollY,
+      scrollDelta = 10,
+      scrollOffset = 150, // scrollY needs to be bigger than scrollOffset to hide navigation
+      headerHeight = 0; 
+
+    var navIsFixed = false; // check if main navigation is fixed
+    if(mainNav.length > 0 && Util.hasClass(mainNav[0], 'hide-nav--fixed')) navIsFixed = true;
+
+    // store button that triggers navigation on mobile
+    var triggerMobile = getTriggerMobileMenu();
+    var prevElement = createPrevElement();
+    var mainNavTop = 0;
+    // list of classes the hide-nav has when it is expanded -> do not hide if it has those classes
+    var navOpenClasses = hidingNav[0].getAttribute('data-nav-target-class'),
+      navOpenArrayClasses = [];
+    if(navOpenClasses) navOpenArrayClasses = navOpenClasses.split(' ');
+    getMainNavTop();
+    if(mainNavTop > 0) {
+      scrollOffset = scrollOffset + mainNavTop;
+    }
+    
+    // init navigation and listen to window scroll event
+    getHeaderHeight();
+    initSecondaryNav();
+    initFixedNav();
+    resetHideNav();
+    window.addEventListener('scroll', function(event){
+      if(scrolling) return;
+      scrolling = true;
+      window.requestAnimationFrame(resetHideNav);
+    });
+
+    window.addEventListener('resize', function(event){
+      if(scrolling) return;
+      scrolling = true;
+      window.requestAnimationFrame(function(){
+        if(headerHeight > 0) {
+          getMainNavTop();
+          getHeaderHeight();
+          initSecondaryNav();
+          initFixedNav();
+        }
+        // reset both navigation
+        hideNavScrollUp();
+
+        scrolling = false;
+      });
+    });
+
+    function getHeaderHeight() {
+      headerHeight = mainNav[0].offsetHeight;
+    };
+
+    function initSecondaryNav() { // if there's a secondary nav, set its top equal to the header height
+      if(subNav.length < 1 || mainNav.length < 1) return;
+      subNav[0].style.top = (headerHeight - 1)+'px';
+    };
+
+    function initFixedNav() {
+      if(!navIsFixed || mainNav.length < 1) return;
+      mainNav[0].style.marginBottom = '-'+headerHeight+'px';
+    };
+
+    function resetHideNav() { // check if navs need to be hidden/revealed
+      currentTop = window.scrollY;
+      if(currentTop - previousTop > scrollDelta && currentTop > scrollOffset) {
+        hideNavScrollDown();
+      } else if( previousTop - currentTop > scrollDelta || (previousTop - currentTop > 0 && currentTop < scrollOffset) ) {
+        hideNavScrollUp();
+      } else if( previousTop - currentTop > 0 && subNav.length > 0 && subNav[0].getBoundingClientRect().top > 0) {
+        setTranslate(subNav[0], '0%');
+      }
+      // if primary nav is fixed -> toggle bg class
+      if(navIsFixed) {
+        var scrollTop = window.scrollY || window.pageYOffset;
+        Util.toggleClass(mainNav[0], 'hide-nav--has-bg', (scrollTop > headerHeight + mainNavTop));
+      }
+      previousTop = currentTop;
+      scrolling = false;
+    };
+
+    function hideNavScrollDown() {
+      // if there's a secondary nav -> it has to reach the top before hiding nav
+      if( subNav.length  > 0 && subNav[0].getBoundingClientRect().top > headerHeight) return;
+      // on mobile -> hide navigation only if dropdown is not open
+      if(triggerMobile && triggerMobile.getAttribute('aria-expanded') == "true") return;
+      // check if main nav has one of the following classes
+      if( mainNav.length > 0 && (!navOpenClasses || !checkNavExpanded())) {
+        setTranslate(mainNav[0], '-100%'); 
+        mainNav[0].addEventListener('transitionend', addOffCanvasClass);
+      }
+      if( subNav.length  > 0 ) setTranslate(subNav[0], '-'+headerHeight+'px');
+    };
+
+    function hideNavScrollUp() {
+      if( mainNav.length > 0 ) {setTranslate(mainNav[0], '0%'); Util.removeClass(mainNav[0], 'hide-nav--off-canvas');mainNav[0].removeEventListener('transitionend', addOffCanvasClass);}
+      if( subNav.length  > 0 ) setTranslate(subNav[0], '0%');
+    };
+
+    function addOffCanvasClass() {
+      mainNav[0].removeEventListener('transitionend', addOffCanvasClass);
+      Util.addClass(mainNav[0], 'hide-nav--off-canvas');
+    };
+
+    function setTranslate(element, val) {
+      element.style.transform = 'translateY('+val+')';
+    };
+
+    function getTriggerMobileMenu() {
+      // store trigger that toggle mobile navigation dropdown
+      var triggerMobileClass = hidingNav[0].getAttribute('data-mobile-trigger');
+      if(!triggerMobileClass) return false;
+      if(triggerMobileClass.indexOf('#') == 0) { // get trigger by ID
+        var trigger = document.getElementById(triggerMobileClass.replace('#', ''));
+        if(trigger) return trigger;
+      } else { // get trigger by class name
+        var trigger = hidingNav[0].getElementsByClassName(triggerMobileClass);
+        if(trigger.length > 0) return trigger[0];
+      }
+      
+      return false;
+    };
+
+    function createPrevElement() {
+      // create element to be inserted right before the mainNav to get its top value
+      if( mainNav.length < 1) return false;
+      var newElement = document.createElement("div"); 
+      newElement.setAttribute('aria-hidden', 'true');
+      mainNav[0].parentElement.insertBefore(newElement, mainNav[0]);
+      var prevElement =  mainNav[0].previousElementSibling;
+      prevElement.style.opacity = '0';
+      return prevElement;
+    };
+
+    function getMainNavTop() {
+      if(!prevElement) return;
+      mainNavTop = prevElement.getBoundingClientRect().top + window.scrollY;
+    };
+
+    function checkNavExpanded() {
+      var navIsOpen = false;
+      for(var i = 0; i < navOpenArrayClasses.length; i++){
+        if(Util.hasClass(mainNav[0], navOpenArrayClasses[i].trim())) {
+          navIsOpen = true;
+          break;
+        }
+      }
+      return navIsOpen;
+    };
+    
+  } else {
+    // if window requestAnimationFrame is not supported -> add bg class to fixed header
+    var mainNav = document.getElementsByClassName('js-hide-nav--main');
+    if(mainNav.length < 1) return;
+    if(Util.hasClass(mainNav[0], 'hide-nav--fixed')) Util.addClass(mainNav[0], 'hide-nav--has-bg');
+  }
+}());
+// File#: _1_masonry
+// Usage: codyhouse.co/license
+
+(function() {
+    var Masonry = function(element) {
+      this.element = element;
+      this.list = this.element.getElementsByClassName('js-masonry__list')[0];
+      this.items = this.element.getElementsByClassName('js-masonry__item');
+      this.activeColumns = 0;
+      this.colStartWidth = 0; // col min-width (defined in CSS using --masonry-col-auto-size variable)
+      this.colWidth = 0; // effective column width
+      this.colGap = 0;
+      // store col heights and items
+      this.colHeights = [];
+      this.colItems = [];
+      // flex full support
+      this.flexSupported = checkFlexSupported(this.items[0]);
+      getGridLayout(this); // get initial grid params
+      setGridLayout(this); // set grid params (width of elements)
+      initMasonryLayout(this); // init gallery layout
+    };
+  
+    function checkFlexSupported(item) {
+      var itemStyle = window.getComputedStyle(item);
+      return itemStyle.getPropertyValue('flex-basis') != 'auto';
+    };
+  
+    function getGridLayout(grid) { // this is used to get initial grid details (width/grid gap)
+      var itemStyle = window.getComputedStyle(grid.items[0]);
+      if( grid.colStartWidth == 0) {
+        grid.colStartWidth = parseFloat(itemStyle.getPropertyValue('width'));
+      }
+      grid.colGap = parseFloat(itemStyle.getPropertyValue('margin-right'));
+    };
+  
+    function setGridLayout(grid) { // set width of items in the grid
+      var containerWidth = parseFloat(window.getComputedStyle(grid.element).getPropertyValue('width'));
+      grid.activeColumns = parseInt((containerWidth + grid.colGap)/(grid.colStartWidth+grid.colGap));
+      if(grid.activeColumns == 0) grid.activeColumns = 1;
+      grid.colWidth = parseFloat((containerWidth - (grid.activeColumns - 1)*grid.colGap)/grid.activeColumns);
+      for(var i = 0; i < grid.items.length; i++) {
+        grid.items[i].style.width = grid.colWidth+'px'; // reset items width
+      }
+    };
+  
+    function initMasonryLayout(grid) {
+      if(grid.flexSupported) {
+        checkImgLoaded(grid); // reset layout when images are loaded
+      } else {
+        Util.addClass(grid.element, 'masonry--loaded'); // make sure the gallery is visible
+      }
+  
+      grid.element.addEventListener('masonry-resize', function(){ // window has been resized -> reset masonry layout
+        getGridLayout(grid);
+        setGridLayout(grid);
+        if(grid.flexSupported) layItems(grid); 
+      });
+  
+      grid.element.addEventListener('masonry-reset', function(event){ // reset layout (e.g., new items added to the gallery)
+        if(grid.flexSupported) checkImgLoaded(grid); 
+      });
+    };
+  
+    function layItems(grid) {
+      Util.addClass(grid.element, 'masonry--loaded'); // make sure the gallery is visible
+      grid.colHeights = [];
+      grid.colItems = [];
+  
+      // grid layout has already been set -> update container height and order of items
+      for(var j = 0; j < grid.activeColumns; j++) {
+        grid.colHeights.push(0); // reset col heights
+        grid.colItems[j] = []; // reset items order
+      }
+      
+      for(var i = 0; i < grid.items.length; i++) {
+        var minHeight = Math.min.apply( Math, grid.colHeights ),
+          index = grid.colHeights.indexOf(minHeight);
+        if(grid.colItems[index]) grid.colItems[index].push(i);
+        grid.items[i].style.flexBasis = 0; // reset flex basis before getting height
+        var itemHeight = grid.items[i].getBoundingClientRect().height || grid.items[i].offsetHeight || 1;
+        grid.colHeights[index] = grid.colHeights[index] + grid.colGap + itemHeight;
+      }
+  
+      // reset height of container
+      var masonryHeight = Math.max.apply( Math, grid.colHeights ) + 5;
+      grid.list.style.cssText = 'height: '+ masonryHeight + 'px;';
+  
+      // go through elements and set flex order
+      var order = 0;
+      for(var i = 0; i < grid.colItems.length; i++) {
+        for(var j = 0; j < grid.colItems[i].length; j++) {
+          grid.items[grid.colItems[i][j]].style.order = order;
+          order = order + 1;
+        }
+        // change flex-basis of last element of each column, so that next element shifts to next col
+        var lastItemCol = grid.items[grid.colItems[i][grid.colItems[i].length - 1]];
+        lastItemCol.style.flexBasis = masonryHeight - grid.colHeights[i] + lastItemCol.getBoundingClientRect().height - 5 + 'px';
+      }
+  
+      // emit custom event when grid has been reset
+      grid.element.dispatchEvent(new CustomEvent('masonry-laid'));
+    };
+  
+    function checkImgLoaded(grid) {
+      var imgs = grid.list.getElementsByTagName('img');
+  
+      function countLoaded() {
+        var setTimeoutOn = false;
+        for(var i = 0; i < imgs.length; i++) {
+          if(!imgs[i].complete) {
+            setTimeoutOn = true;
+            break;
+          } else if (typeof imgs[i].naturalHeight !== "undefined" && imgs[i].naturalHeight == 0) {
+            setTimeoutOn = true;
+            break;
+          }
+        }
+  
+        if(!setTimeoutOn) {
+          layItems(grid);
+        } else {
+          setTimeout(function(){
+            countLoaded();
+          }, 100);
+        }
+      };
+  
+      if(imgs.length == 0) {
+        layItems(grid); // no need to wait -> no img available
+      } else {
+        countLoaded();
+      }
+    };
+  
+    //initialize the Masonry objects
+    var masonries = document.getElementsByClassName('js-masonry'), 
+      flexSupported = Util.cssSupports('flex-basis', 'auto'),
+      masonriesArray = [];
+  
+    if( masonries.length > 0) {
+      for( var i = 0; i < masonries.length; i++) {
+        if(!flexSupported) {
+          Util.addClass(masonries[i], 'masonry--loaded'); // reveal gallery
+        } else {
+          (function(i){masonriesArray.push(new Masonry(masonries[i]));})(i); // init Masonry Layout
+        }
+      }
+  
+      if(!flexSupported) return;
+  
+      // listen to window resize -> reorganize items in gallery
+      var resizingId = false,
+        customEvent = new CustomEvent('masonry-resize');
+        
+      window.addEventListener('resize', function() {
+        clearTimeout(resizingId);
+        resizingId = setTimeout(doneResizing, 500);
+      });
+  
+      function doneResizing() {
+        for( var i = 0; i < masonriesArray.length; i++) {
+          (function(i){masonriesArray[i].element.dispatchEvent(customEvent)})(i);
+        };
+      };
+    };
+  }());
 // File#: _1_modal-window
 // Usage: codyhouse.co/license
 (function() {
@@ -1366,6 +1703,80 @@ function resetFocusTabsStyle() {
   };
 
   window.Autocomplete = Autocomplete;
+}());
+// File#: _2_flexi-header
+// Usage: codyhouse.co/license
+(function() {
+  var flexHeader = document.getElementsByClassName('js-f-header');
+	if(flexHeader.length > 0) {
+		var menuTrigger = flexHeader[0].getElementsByClassName('js-anim-menu-btn')[0],
+			firstFocusableElement = getMenuFirstFocusable();
+
+		// we'll use these to store the node that needs to receive focus when the mobile menu is closed 
+		var focusMenu = false;
+
+		menuTrigger.addEventListener('anim-menu-btn-clicked', function(event){
+			toggleMenuNavigation(event.detail);
+		});
+
+		// listen for key events
+		window.addEventListener('keyup', function(event){
+			// listen for esc key
+			if( (event.keyCode && event.keyCode == 27) || (event.key && event.key.toLowerCase() == 'escape' )) {
+				// close navigation on mobile if open
+				if(menuTrigger.getAttribute('aria-expanded') == 'true' && isVisible(menuTrigger)) {
+					focusMenu = menuTrigger; // move focus to menu trigger when menu is close
+					menuTrigger.click();
+				}
+			}
+			// listen for tab key
+			if( (event.keyCode && event.keyCode == 9) || (event.key && event.key.toLowerCase() == 'tab' )) {
+				// close navigation on mobile if open when nav loses focus
+				if(menuTrigger.getAttribute('aria-expanded') == 'true' && isVisible(menuTrigger) && !document.activeElement.closest('.js-f-header')) menuTrigger.click();
+			}
+		});
+
+		// listen for resize
+		var resizingId = false;
+		window.addEventListener('resize', function() {
+			clearTimeout(resizingId);
+			resizingId = setTimeout(doneResizing, 500);
+		});
+
+		function getMenuFirstFocusable() {
+			var focusableEle = flexHeader[0].getElementsByClassName('f-header__nav')[0].querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary'),
+				firstFocusable = false;
+			for(var i = 0; i < focusableEle.length; i++) {
+				if( focusableEle[i].offsetWidth || focusableEle[i].offsetHeight || focusableEle[i].getClientRects().length ) {
+					firstFocusable = focusableEle[i];
+					break;
+				}
+			}
+
+			return firstFocusable;
+    };
+    
+    function isVisible(element) {
+      return (element.offsetWidth || element.offsetHeight || element.getClientRects().length);
+		};
+
+		function doneResizing() {
+			if( !isVisible(menuTrigger) && Util.hasClass(flexHeader[0], 'f-header--expanded')) {
+				menuTrigger.click();
+			}
+		};
+		
+		function toggleMenuNavigation(bool) { // toggle menu visibility on small devices
+			Util.toggleClass(document.getElementsByClassName('f-header__nav')[0], 'f-header__nav--is-visible', bool);
+			Util.toggleClass(flexHeader[0], 'f-header--expanded', bool);
+			menuTrigger.setAttribute('aria-expanded', bool);
+			if(bool) firstFocusableElement.focus(); // move focus to first focusable element
+			else if(focusMenu) {
+				focusMenu.focus();
+				focusMenu = false;
+			}
+		};
+	}
 }());
 // File#: _2_morphing-image-modal
 // Usage: codyhouse.co/license
