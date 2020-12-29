@@ -386,6 +386,270 @@ function resetFocusTabsStyle() {
     }
   }
 }());
+// File#: _1_diagonal-movement
+// Usage: codyhouse.co/license
+/*
+  Modified version of the jQuery-menu-aim plugin
+  https://github.com/kamens/jQuery-menu-aim
+  - Replaced jQuery with Vanilla JS
+  - Minor changes
+*/
+(function() {
+  var menuAim = function(opts) {
+    init(opts);
+  };
+
+  window.menuAim = menuAim;
+
+  function init(opts) {
+    var activeRow = null,
+      mouseLocs = [],
+      lastDelayLoc = null,
+      timeoutId = null,
+      options = Util.extend({
+        menu: '',
+        rows: false, //if false, get direct children - otherwise pass nodes list 
+        submenuSelector: "*",
+        submenuDirection: "right",
+        tolerance: 75,  // bigger = more forgivey when entering submenu
+        enter: function(){},
+        exit: function(){},
+        activate: function(){},
+        deactivate: function(){},
+        exitMenu: function(){}
+      }, opts),
+      menu = options.menu;
+
+    var MOUSE_LOCS_TRACKED = 3,  // number of past mouse locations to track
+      DELAY = 300;  // ms delay when user appears to be entering submenu
+
+    /**
+     * Keep track of the last few locations of the mouse.
+     */
+    var mousemoveDocument = function(e) {
+      mouseLocs.push({x: e.pageX, y: e.pageY});
+
+      if (mouseLocs.length > MOUSE_LOCS_TRACKED) {
+        mouseLocs.shift();
+      }
+    };
+
+    /**
+     * Cancel possible row activations when leaving the menu entirely
+     */
+    var mouseleaveMenu = function() {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+
+      // If exitMenu is supplied and returns true, deactivate the
+      // currently active row on menu exit.
+      if (options.exitMenu(this)) {
+        if (activeRow) {
+          options.deactivate(activeRow);
+        }
+
+        activeRow = null;
+      }
+    };
+
+    /**
+     * Trigger a possible row activation whenever entering a new row.
+     */
+    var mouseenterRow = function() {
+      if (timeoutId) {
+        // Cancel any previous activation delays
+        clearTimeout(timeoutId);
+      }
+
+      options.enter(this);
+      possiblyActivate(this);
+    },
+    mouseleaveRow = function() {
+      options.exit(this);
+    };
+
+    /*
+     * Immediately activate a row if the user clicks on it.
+     */
+    var clickRow = function() {
+      activate(this);
+    };  
+
+    /**
+     * Activate a menu row.
+     */
+    var activate = function(row) {
+      if (row == activeRow) {
+        return;
+      }
+
+      if (activeRow) {
+        options.deactivate(activeRow);
+      }
+
+      options.activate(row);
+      activeRow = row;
+    };
+
+    /**
+     * Possibly activate a menu row. If mouse movement indicates that we
+     * shouldn't activate yet because user may be trying to enter
+     * a submenu's content, then delay and check again later.
+     */
+    var possiblyActivate = function(row) {
+      var delay = activationDelay();
+
+      if (delay) {
+        timeoutId = setTimeout(function() {
+          possiblyActivate(row);
+        }, delay);
+      } else {
+        activate(row);
+      }
+    };
+
+    /**
+     * Return the amount of time that should be used as a delay before the
+     * currently hovered row is activated.
+     *
+     * Returns 0 if the activation should happen immediately. Otherwise,
+     * returns the number of milliseconds that should be delayed before
+     * checking again to see if the row should be activated.
+     */
+    var activationDelay = function() {
+      if (!activeRow || !Util.is(activeRow, options.submenuSelector)) {
+        // If there is no other submenu row already active, then
+        // go ahead and activate immediately.
+        return 0;
+      }
+
+      function getOffset(element) {
+        var rect = element.getBoundingClientRect();
+        return { top: rect.top + window.pageYOffset, left: rect.left + window.pageXOffset };
+      };
+
+      var offset = getOffset(menu),
+          upperLeft = {
+              x: offset.left,
+              y: offset.top - options.tolerance
+          },
+          upperRight = {
+              x: offset.left + menu.offsetWidth,
+              y: upperLeft.y
+          },
+          lowerLeft = {
+              x: offset.left,
+              y: offset.top + menu.offsetHeight + options.tolerance
+          },
+          lowerRight = {
+              x: offset.left + menu.offsetWidth,
+              y: lowerLeft.y
+          },
+          loc = mouseLocs[mouseLocs.length - 1],
+          prevLoc = mouseLocs[0];
+
+      if (!loc) {
+        return 0;
+      }
+
+      if (!prevLoc) {
+        prevLoc = loc;
+      }
+
+      if (prevLoc.x < offset.left || prevLoc.x > lowerRight.x || prevLoc.y < offset.top || prevLoc.y > lowerRight.y) {
+        // If the previous mouse location was outside of the entire
+        // menu's bounds, immediately activate.
+        return 0;
+      }
+
+      if (lastDelayLoc && loc.x == lastDelayLoc.x && loc.y == lastDelayLoc.y) {
+        // If the mouse hasn't moved since the last time we checked
+        // for activation status, immediately activate.
+        return 0;
+      }
+
+      // Detect if the user is moving towards the currently activated
+      // submenu.
+      //
+      // If the mouse is heading relatively clearly towards
+      // the submenu's content, we should wait and give the user more
+      // time before activating a new row. If the mouse is heading
+      // elsewhere, we can immediately activate a new row.
+      //
+      // We detect this by calculating the slope formed between the
+      // current mouse location and the upper/lower right points of
+      // the menu. We do the same for the previous mouse location.
+      // If the current mouse location's slopes are
+      // increasing/decreasing appropriately compared to the
+      // previous's, we know the user is moving toward the submenu.
+      //
+      // Note that since the y-axis increases as the cursor moves
+      // down the screen, we are looking for the slope between the
+      // cursor and the upper right corner to decrease over time, not
+      // increase (somewhat counterintuitively).
+      function slope(a, b) {
+        return (b.y - a.y) / (b.x - a.x);
+      };
+
+      var decreasingCorner = upperRight,
+        increasingCorner = lowerRight;
+
+      // Our expectations for decreasing or increasing slope values
+      // depends on which direction the submenu opens relative to the
+      // main menu. By default, if the menu opens on the right, we
+      // expect the slope between the cursor and the upper right
+      // corner to decrease over time, as explained above. If the
+      // submenu opens in a different direction, we change our slope
+      // expectations.
+      if (options.submenuDirection == "left") {
+        decreasingCorner = lowerLeft;
+        increasingCorner = upperLeft;
+      } else if (options.submenuDirection == "below") {
+        decreasingCorner = lowerRight;
+        increasingCorner = lowerLeft;
+      } else if (options.submenuDirection == "above") {
+        decreasingCorner = upperLeft;
+        increasingCorner = upperRight;
+      }
+
+      var decreasingSlope = slope(loc, decreasingCorner),
+        increasingSlope = slope(loc, increasingCorner),
+        prevDecreasingSlope = slope(prevLoc, decreasingCorner),
+        prevIncreasingSlope = slope(prevLoc, increasingCorner);
+
+      if (decreasingSlope < prevDecreasingSlope && increasingSlope > prevIncreasingSlope) {
+        // Mouse is moving from previous location towards the
+        // currently activated submenu. Delay before activating a
+        // new menu row, because user may be moving into submenu.
+        lastDelayLoc = loc;
+        return DELAY;
+      }
+
+      lastDelayLoc = null;
+      return 0;
+    };
+
+    /**
+     * Hook up initial menu events
+     */
+    menu.addEventListener('mouseleave', mouseleaveMenu);  
+    var rows = (options.rows) ? options.rows : menu.children;
+    if(rows.length > 0) {
+      for(var i = 0; i < rows.length; i++) {(function(i){
+        rows[i].addEventListener('mouseenter', mouseenterRow);  
+        rows[i].addEventListener('mouseleave', mouseleaveRow);
+        rows[i].addEventListener('click', clickRow);  
+      })(i);}
+    }
+
+    document.addEventListener('mousemove', function(event){
+    (!window.requestAnimationFrame) ? mousemoveDocument(event) : window.requestAnimationFrame(function(){mousemoveDocument(event);});
+    });
+  };
+}());
+
+
 // File#: _1_header
 // Usage: codyhouse.co/license
 (function() {
@@ -2358,6 +2622,307 @@ function resetFocusTabsStyle() {
 			});
 		});
   }
+}());
+// File#: _3_main-header-v2
+// Usage: codyhouse.co/license
+(function() {
+	var Submenu = function(element) {
+		this.element = element;
+		this.trigger = this.element.getElementsByClassName('header-v2__nav-link')[0];
+		this.dropdown = this.element.getElementsByClassName('header-v2__nav-dropdown')[0];
+		this.triggerFocus = false;
+		this.dropdownFocus = false;
+		this.hideInterval = false;
+		this.prevFocus = false; // nested dropdown - store element that was in focus before focus changed
+		initSubmenu(this);
+		initNestedDropdown(this);
+	};
+
+	function initSubmenu(list) {
+		initElementEvents(list, list.trigger);
+		initElementEvents(list, list.dropdown);
+	};
+
+	function initElementEvents(list, element, bool) {
+		element.addEventListener('focus', function(){
+			bool = true;
+			showDropdown(list);
+		});
+		element.addEventListener('focusout', function(event){
+			bool = false;
+			hideDropdown(list, event);
+		});
+	};
+
+	function showDropdown(list) {
+		if(list.hideInterval) clearInterval(list.hideInterval);
+		Util.addClass(list.dropdown, 'header-v2__nav-list--is-visible');
+		resetDropdownStyle(list.dropdown, true);
+	};
+
+	function hideDropdown(list, event) {
+		if(list.hideInterval) clearInterval(this.hideInterval);
+		list.hideInterval = setTimeout(function(){
+			var submenuFocus = document.activeElement.closest('.header-v2__nav-item--main'),
+				inFocus = submenuFocus && (submenuFocus == list.element);
+			if(!list.triggerFocus && !list.dropdownFocus && !inFocus) { // hide if focus is outside submenu
+				Util.removeClass(list.dropdown, 'header-v2__nav-list--is-visible');
+				resetDropdownStyle(list.dropdown, false);
+				hideSubLevels(list);
+				list.prevFocus = false;
+			}
+		}, 100);
+	};
+
+	function initNestedDropdown(list) {
+		var dropdownMenu = list.element.getElementsByClassName('header-v2__nav-list');
+		for(var i = 0; i < dropdownMenu.length; i++) {
+			var listItems = dropdownMenu[i].children;
+			// bind hover
+	    new menuAim({
+	      menu: dropdownMenu[i],
+	      activate: function(row) {
+	      	var subList = row.getElementsByClassName('header-v2__nav-dropdown')[0];
+	      	if(!subList) return;
+	      	Util.addClass(row.querySelector('a.header-v2__nav-link'), 'header-v2__nav-link--hover');
+	      	showLevel(list, subList);
+	      },
+	      deactivate: function(row) {
+	      	var subList = row.getElementsByClassName('header-v2__nav-dropdown')[0];
+	      	if(!subList) return;
+	      	Util.removeClass(row.querySelector('a.header-v2__nav-link'), 'header-v2__nav-link--hover');
+	      	hideLevel(list, subList);
+	      },
+	      exitMenu: function() {
+	        return true;
+	      },
+	      submenuSelector: '.header-v2__nav-item--has-children',
+	    });
+		}
+		// store focus element before change in focus
+		list.element.addEventListener('keydown', function(event) { 
+			if( event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab' ) {
+				list.prevFocus = document.activeElement;
+			}
+		});
+		// make sure that sublevel are visible when their items are in focus
+		list.element.addEventListener('keyup', function(event) {
+			if( event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab' ) {
+				// focus has been moved -> make sure the proper classes are added to subnavigation
+				var focusElement = document.activeElement,
+					focusElementParent = focusElement.closest('.header-v2__nav-dropdown'),
+					focusElementSibling = focusElement.nextElementSibling;
+
+				// if item in focus is inside submenu -> make sure it is visible
+				if(focusElementParent && !Util.hasClass(focusElementParent, 'header-v2__nav-list--is-visible')) {
+					showLevel(list, focusElementParent);
+				}
+				// if item in focus triggers a submenu -> make sure it is visible
+				if(focusElementSibling && !Util.hasClass(focusElementSibling, 'header-v2__nav-list--is-visible')) {
+					showLevel(list, focusElementSibling);
+				}
+
+				// check previous element in focus -> hide sublevel if required 
+				if( !list.prevFocus) return;
+				var prevFocusElementParent = list.prevFocus.closest('.header-v2__nav-dropdown'),
+					prevFocusElementSibling = list.prevFocus.nextElementSibling;
+				
+				if( !prevFocusElementParent ) return;
+				
+				// element in focus and element prev in focus are siblings
+				if( focusElementParent && focusElementParent == prevFocusElementParent) {
+					if(prevFocusElementSibling) hideLevel(list, prevFocusElementSibling);
+					return;
+				}
+
+				// element in focus is inside submenu triggered by element prev in focus
+				if( prevFocusElementSibling && focusElementParent && focusElementParent == prevFocusElementSibling) return;
+				
+				// shift tab -> element in focus triggers the submenu of the element prev in focus
+				if( focusElementSibling && prevFocusElementParent && focusElementSibling == prevFocusElementParent) return;
+				
+				var focusElementParentParent = focusElementParent.parentNode.closest('.header-v2__nav-dropdown');
+				
+				// shift tab -> element in focus is inside the dropdown triggered by a siblings of the element prev in focus
+				if(focusElementParentParent && focusElementParentParent == prevFocusElementParent) {
+					if(prevFocusElementSibling) hideLevel(list, prevFocusElementSibling);
+					return;
+				}
+				
+				if(prevFocusElementParent && Util.hasClass(prevFocusElementParent, 'header-v2__nav-list--is-visible')) {
+					hideLevel(list, prevFocusElementParent);
+				}
+			}
+		});
+	};
+
+	function hideSubLevels(list) {
+		var visibleSubLevels = list.dropdown.getElementsByClassName('header-v2__nav-list--is-visible');
+		if(visibleSubLevels.length == 0) return;
+		while (visibleSubLevels[0]) {
+			hideLevel(list, visibleSubLevels[0]);
+	 	}
+	 	var hoveredItems = list.dropdown.getElementsByClassName('header-v2__nav-link--hover');
+	 	while (hoveredItems[0]) {
+			Util.removeClass(hoveredItems[0], 'header-v2__nav-link--hover');
+	 	}
+	};
+
+	function showLevel(list, level, bool) {
+		if(bool == undefined) {
+			//check if the sublevel needs to be open to the left
+			Util.removeClass(level, 'header-v2__nav-dropdown--nested-left');
+			var boundingRect = level.getBoundingClientRect();
+			if(window.innerWidth - boundingRect.right < 5 && boundingRect.left + window.scrollX > 2*boundingRect.width) Util.addClass(level, 'header-v2__nav-dropdown--nested-left');
+		}
+		Util.addClass(level, 'header-v2__nav-list--is-visible');
+	};
+
+	function hideLevel(list, level) {
+		if(!Util.hasClass(level, 'header-v2__nav-list--is-visible')) return;
+		Util.removeClass(level, 'header-v2__nav-list--is-visible');
+		
+		level.addEventListener('transition', function cb(){
+			level.removeEventListener('transition', cb);
+			Util.removeClass(level, 'header-v2__nav-dropdown--nested-left');
+		});
+	};
+
+	var mainHeader = document.getElementsByClassName('js-header-v2');
+	if(mainHeader.length > 0) {
+		var menuTrigger = mainHeader[0].getElementsByClassName('js-anim-menu-btn')[0],
+			firstFocusableElement = getMenuFirstFocusable();
+
+		// we'll use these to store the node that needs to receive focus when the mobile menu is closed 
+		var focusMenu = false;
+
+		menuTrigger.addEventListener('anim-menu-btn-clicked', function(event){ // toggle menu visibility an small devices
+			Util.toggleClass(document.getElementsByClassName('header-v2__nav')[0], 'header-v2__nav--is-visible', event.detail);
+			Util.toggleClass(mainHeader[0], 'header-v2--expanded', event.detail);
+			menuTrigger.setAttribute('aria-expanded', event.detail);
+			if(event.detail) firstFocusableElement.focus(); // move focus to first focusable element
+			else if(focusMenu) {
+				focusMenu.focus();
+				focusMenu = false;
+			}
+		});
+
+		// take care of submenu
+		var mainList = mainHeader[0].getElementsByClassName('header-v2__nav-list--main');
+		if(mainList.length > 0) {
+			for( var i = 0; i < mainList.length; i++) {
+				(function(i){
+					new menuAim({ // use diagonal movement detection for main submenu
+			      menu: mainList[i],
+			      activate: function(row) {
+			      	var submenu = row.getElementsByClassName('header-v2__nav-dropdown');
+			      	if(submenu.length == 0 ) return;
+			      	Util.addClass(submenu[0], 'header-v2__nav-list--is-visible');
+			      	resetDropdownStyle(submenu[0], true);
+			      },
+			      deactivate: function(row) {
+			      	var submenu = row.getElementsByClassName('header-v2__nav-dropdown');
+			      	if(submenu.length == 0 ) return;
+			      	Util.removeClass(submenu[0], 'header-v2__nav-list--is-visible');
+			      	resetDropdownStyle(submenu[0], false);
+			      },
+			      exitMenu: function() {
+			        return true;
+			      },
+			      submenuSelector: '.header-v2__nav-item--has-children',
+			      submenuDirection: 'below'
+			    });
+
+			    // take care of focus event for main submenu
+					var subMenu = mainList[i].getElementsByClassName('header-v2__nav-item--main');
+					for(var j = 0; j < subMenu.length; j++) {(function(j){if(Util.hasClass(subMenu[j], 'header-v2__nav-item--has-children')) new Submenu(subMenu[j]);})(j);};
+				})(i);
+			}
+		}
+
+		// if data-animation-offset is set -> check scrolling
+		var animateHeader = mainHeader[0].getAttribute('data-animation');
+		if(animateHeader && animateHeader == 'on') {
+			var scrolling = false,
+				scrollOffset = (mainHeader[0].getAttribute('data-animation-offset')) ? parseInt(mainHeader[0].getAttribute('data-animation-offset')) : 400,
+				mainHeaderHeight = mainHeader[0].offsetHeight,
+				mainHeaderWrapper = mainHeader[0].getElementsByClassName('header-v2__wrapper')[0];
+
+			window.addEventListener("scroll", function(event) {
+				if( !scrolling ) {
+					scrolling = true;
+					(!window.requestAnimationFrame) ? setTimeout(function(){checkMainHeader();}, 250) : window.requestAnimationFrame(checkMainHeader);
+				}
+			});
+
+			function checkMainHeader() {
+				var windowTop = window.scrollY || document.documentElement.scrollTop;
+				Util.toggleClass(mainHeaderWrapper, 'header-v2__wrapper--is-fixed', windowTop >= mainHeaderHeight);
+				Util.toggleClass(mainHeaderWrapper, 'header-v2__wrapper--slides-down', windowTop >= scrollOffset);
+				scrolling = false;
+			};
+		}
+
+		// listen for key events
+		window.addEventListener('keyup', function(event){
+			// listen for esc key
+			if( (event.keyCode && event.keyCode == 27) || (event.key && event.key.toLowerCase() == 'escape' )) {
+				// close navigation on mobile if open
+				if(menuTrigger.getAttribute('aria-expanded') == 'true' && isVisible(menuTrigger)) {
+					focusMenu = menuTrigger; // move focus to menu trigger when menu is close
+					menuTrigger.click();
+				}
+			}
+			// listen for tab key
+			if( (event.keyCode && event.keyCode == 9) || (event.key && event.key.toLowerCase() == 'tab' )) {
+				// close navigation on mobile if open when nav loses focus
+				if(menuTrigger.getAttribute('aria-expanded') == 'true' && isVisible(menuTrigger) && !document.activeElement.closest('.js-header-v2')) menuTrigger.click();
+			}
+		});
+
+		// listen for resize
+		var resizingId = false;
+		window.addEventListener('resize', function() {
+			clearTimeout(resizingId);
+			resizingId = setTimeout(doneResizing, 500);
+		});
+
+		function doneResizing() {
+			if( !isVisible(menuTrigger) && Util.hasClass(mainHeader[0], 'header-v2--expanded')) menuTrigger.click();
+		};
+
+		function getMenuFirstFocusable() {
+			var focusableEle = mainHeader[0].getElementsByClassName('header-v2__nav')[0].querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary'),
+				firstFocusable = false;
+			for(var i = 0; i < focusableEle.length; i++) {
+				if( focusableEle[i].offsetWidth || focusableEle[i].offsetHeight || focusableEle[i].getClientRects().length ) {
+					firstFocusable = focusableEle[i];
+					break;
+				}
+			}
+
+			return firstFocusable;
+		};
+	}
+
+	function resetDropdownStyle(dropdown, bool) {
+		if(!bool) {
+			dropdown.addEventListener('transitionend', function cb(){
+				dropdown.removeAttribute('style');
+				dropdown.removeEventListener('transitionend', cb);
+			});
+		} else {
+			var boundingRect = dropdown.getBoundingClientRect();
+			if(window.innerWidth - boundingRect.right < 5 && boundingRect.left + window.scrollX > 2*boundingRect.width) {
+				var left = parseFloat(window.getComputedStyle(dropdown).getPropertyValue('left'));
+				dropdown.style.left = (left + window.innerWidth - boundingRect.right - 5) + 'px';
+			}
+		}
+	};
+
+	function isVisible(element) {
+		return (element.offsetWidth || element.offsetHeight || element.getClientRects().length);
+	};
 }());
 // File#: _3_select-autocomplete
 // Usage: codyhouse.co/license
