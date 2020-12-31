@@ -9,7 +9,7 @@ Usage: codyhouse.co/license
 
 :root {
     --masonry-grid-gap: var(--space-sm);
-    --masonry-col-auto-size: 280px; // col min-width value -> used in JS to auto-update the masonry cols width
+    --masonry-col-auto-size: 300px; // col min-width value -> used in JS to auto-update the masonry cols width
   }
   
   .masonry {}

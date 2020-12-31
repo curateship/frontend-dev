@@ -15,12 +15,12 @@ Usage: codyhouse.co/license
 
   &::after { // shadow overlay indicating scrolling
     content: '';
-    width: 1em;
+    width: 10em;
     height: 100%;
     position: absolute;
     top: 0;
     right: 0;
-    background: linear-gradient(to right, alpha(var(--color-contrast-lower), 0), alpha(var(--color-contrast-lower), 1));
+    background: linear-gradient(to right, alpha(var(--color-contrast-lower), 0), alpha(var(--color-contrast-lower), 2));
     pointer-events: none;
   }
 }
