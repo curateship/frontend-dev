@@ -10,7 +10,7 @@ Usage: codyhouse.co/license
 .drop-menu {
   --drop-menu-item-height: 40px;
   --drop-menu-gap-y: 4px; // (⚠️ use px unit) vertical gap between the menu and its control
-  --drop-menu-transition-duration: .3s;
+  --drop-menu-transition-duration: 0.3s;
   --drop-menu-width-desktop: 300px; // width on desktop
 
   display: inline-block;
@@ -34,12 +34,14 @@ Usage: codyhouse.co/license
   transform-origin: center top;
   visibility: hidden;
   opacity: 0;
-  transition: opacity var(--drop-menu-transition-duration), visibility 0s var(--drop-menu-transition-duration), transform var(--drop-menu-transition-duration) var(--ease-out);
+  transition: opacity var(--drop-menu-transition-duration),
+    visibility 0s var(--drop-menu-transition-duration),
+    transform var(--drop-menu-transition-duration) var(--ease-out);
 
   // used in JS to detect when the drop menu needs to switch from the mobile layout to the desktop one
   &::before {
     display: none;
-    content: 'mobile';
+    content: "mobile";
   }
 }
 
@@ -49,7 +51,8 @@ Usage: codyhouse.co/license
   transform: translateY(0);
   visibility: visible;
   opacity: 1;
-  transition: opacity var(--drop-menu-transition-duration), transform var(--drop-menu-transition-duration) var(--ease-out);
+  transition: opacity var(--drop-menu-transition-duration),
+    transform var(--drop-menu-transition-duration) var(--ease-out);
 }
 
 .drop-menu__inner {
@@ -70,7 +73,7 @@ Usage: codyhouse.co/license
   background-color: var(--color-bg);
   box-shadow: var(--shadow-md);
   flex-shrink: 0;
-  transition: .3s;
+  transition: 0.3s;
   margin-top: auto;
 
   position: sticky;
@@ -97,7 +100,8 @@ Usage: codyhouse.co/license
 .drop-menu__list {
   transition: var(--drop-menu-transition-duration) var(--ease-out);
 
-  &.drop-menu__list--in, &.drop-menu__list--out {
+  &.drop-menu__list--in,
+  &.drop-menu__list--out {
     visibility: visible;
     opacity: 1;
     transform: translateX(0%);
@@ -129,7 +133,10 @@ Usage: codyhouse.co/license
 .drop-menu__search-input,
 .drop-menu__btn,
 .drop-menu__link {
-  transition: background .2s, color .2s, transform var(--drop-menu-transition-duration) var(--ease-out), opacity var(--drop-menu-transition-duration), visibility var(--drop-menu-transition-duration);
+  transition: background 0.2s, color 0.2s,
+    transform var(--drop-menu-transition-duration) var(--ease-out),
+    opacity var(--drop-menu-transition-duration),
+    visibility var(--drop-menu-transition-duration);
 }
 
 // search
@@ -138,22 +145,24 @@ Usage: codyhouse.co/license
 }
 
 .drop-menu__search-input {
-  padding-left: calc(var(--space-xs) + 1em + var(--space-xxxs)); // 1em = icon size
+  padding-left: calc(
+    var(--space-xs) + 1em + var(--space-xxxs)
+  ); // 1em = icon size
 
   &::-webkit-search-decoration,
   &::-webkit-search-cancel-button,
   &::-webkit-search-results-button,
   &::-webkit-search-results-decoration {
-    -webkit-appearance:none;
+    -webkit-appearance: none;
   }
 
   &::-ms-clear,
   &::-ms-reveal {
     display: none;
     width: 0;
-    height: 0; 
+    height: 0;
   }
-  
+
   &:focus {
     outline: none;
   }
@@ -168,7 +177,7 @@ Usage: codyhouse.co/license
   left: var(--space-xs);
   top: calc(50% - 0.5em);
   pointer-events: none;
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .drop-menu--searching .drop-menu__search-item ~ * {
@@ -226,14 +235,14 @@ Usage: codyhouse.co/license
   -webkit-overflow-scrolling: touch;
 }
 
-@include breakpoint(sm) {
+@include breakpoint(xxs) {
   .drop-menu {
     min-height: 0;
     max-width: var(--drop-menu-width-desktop);
     border-radius: var(--radius-md);
 
     &::before {
-      content: 'desktop';
+      content: "desktop";
     }
   }
 

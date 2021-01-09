@@ -1,13 +1,21 @@
-@media (max-width: 767px) {
-  .anim-menu-btn,
-  .drop-menu--is-visible {
-    display: none !important;
-  }
-}
-
 @media screen and (max-width: 652px) {
   .masonry__item {
     max-width: 47%;
+  }
+}
+@media screen and (max-width: 552px) {
+  .masonry__item {
+    max-width: 46.8%;
+  }
+}
+@media screen and (max-width: 452px) {
+  .masonry__item {
+    max-width: 46.6%;
+  }
+}
+@media screen and (max-width: 352px) {
+  .masonry__item {
+    max-width: 44.5%;
   }
 }
 
