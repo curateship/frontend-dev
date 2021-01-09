@@ -1,0 +1,312 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1')
+  script.
+    document.getElementsByTagName("html")[0].className += " js";
+  link#codyframe(rel='stylesheet' href='assets/css/style.css')
+  // Uncomment the script below if you need to support browsers where CSS Variables have not been implemented (e.g., IE11)
+  //
+    <script>
+    if(!('CSS' in window) || !CSS.supports('color', 'var(--color-var)')) {var cfStyle = document.getElementById('codyframe');if(cfStyle) {var href = cfStyle.getAttribute('href');href = href.replace('style.css', 'style-fallback.css');cfStyle.setAttribute('href', href);}}
+    </script>
+  title Get Started | CodyFrame
+table.table.position-relative.z-index-1.js-table.container.max-width-lg(class='table--expanded@sm width-100%' aria-label='Table Example')
+  thead.table__header.table__header--sticky
+    tr.table__row
+      th.table__cell.text-left(scope='col') Type
+      th.table__cell.text-left(scope='col') Description
+      th.table__cell.text-left(scope='col') Completion
+      th.table__cell.text-left(scope='col') Date
+      th.table__cell.text-left(scope='col') Action
+  tbody.table__body
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Olivia
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, at.
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#87c458')
+          polyline(points='12 24 20 32 36 16' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell.text-nowrap(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  18 Dec, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Oliver
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum dolor sit amet.
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#87c458')
+          polyline(points='12 24 20 32 36 16' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  01 Dec, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Francesca
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic possimus quia cum corporis vero ducimus delectus nulla maiores repellat magni?
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option not available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#f54250')
+          line(x1='33' y1='15' x2='15' y2='33' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+          line(x1='15' y1='15' x2='33' y2='33' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  25 Nov, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Joshua
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam libero recusandae corrupti?
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#87c458')
+          polyline(points='12 24 20 32 36 16' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  18 Nov, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Alethea
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ducimus debitis nulla voluptas pariatur inventore ad!
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#87c458')
+          polyline(points='12 24 20 32 36 16' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  05 Nov, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Sheree
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit, saepe vel quaerat voluptatum fugiat at delectus id quasi voluptatibus magni, culpa adipisci ad?
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option not available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#f54250')
+          line(x1='33' y1='15' x2='15' y2='33' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+          line(x1='15' y1='15' x2='33' y2='33' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  25 Oct, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Donny
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#87c458')
+          polyline(points='12 24 20 32 36 16' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  25 Oct, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Tatiana
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Neque ex, minus eum voluptatem sequi quos porro officiis laborum?
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#87c458')
+          polyline(points='12 24 20 32 36 16' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  25 Oct, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Olivia
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, at.
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#87c458')
+          polyline(points='12 24 20 32 36 16' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell.text-nowrap(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  18 Dec, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Oliver
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum dolor sit amet.
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#87c458')
+          polyline(points='12 24 20 32 36 16' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  01 Dec, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Francesca
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic possimus quia cum corporis vero ducimus delectus nulla maiores repellat magni?
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option not available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#f54250')
+          line(x1='33' y1='15' x2='15' y2='33' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+          line(x1='15' y1='15' x2='33' y2='33' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  25 Nov, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Joshua
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam libero recusandae corrupti?
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#87c458')
+          polyline(points='12 24 20 32 36 16' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  18 Nov, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Oliver
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum dolor sit amet.
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#87c458')
+          polyline(points='12 24 20 32 36 16' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  01 Dec, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Francesca
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic possimus quia cum corporis vero ducimus delectus nulla maiores repellat magni?
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option not available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#f54250')
+          line(x1='33' y1='15' x2='15' y2='33' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+          line(x1='15' y1='15' x2='33' y2='33' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  25 Nov, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+    tr.table__row
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Name:
+        |  Joshua
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Description:
+        |  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam libero recusandae corrupti?
+      td.table__cell.text-center(role='cell')
+        span.table__label(aria-hidden='true') Option:
+        svg.icon.icon--md(viewbox='0 0 48 48')
+          title Option available
+          path(d='M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z' fill='#87c458')
+          polyline(points='12 24 20 32 36 16' fill='none' stroke='#fff' stroke-linecap='square' stroke-miterlimit='10' stroke-width='4')
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Date:
+        |  18 Nov, 2018
+      td.table__cell(role='cell')
+        span.table__label(aria-hidden='true') Action:
+        button.btn.btn--subtle Button
+script(src='assets/js/scripts.js')
