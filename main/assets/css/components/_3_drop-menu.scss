@@ -235,7 +235,7 @@ Usage: codyhouse.co/license
   -webkit-overflow-scrolling: touch;
 }
 
-@include breakpoint(xxs) {
+@media (min-width: 1rem) {
   .drop-menu {
     min-height: 0;
     max-width: var(--drop-menu-width-desktop);
