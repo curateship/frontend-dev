@@ -15,45 +15,8 @@ if(!('CSS' in window) || !CSS.supports('color', 'var(--color-var)')) {var cfStyl
 <div class="bg-contrast-lower">
   <div class="container max-width-lg">
     <div class="subnav js-subnav">
-      <button
-        class="reset btn btn--subtle margin-y-sm subnav__control js-subnav__control"
-      >
-        <span>Show Categories</span
-        ><svg
-          class="icon icon--xxs margin-left-xxs"
-          aria-hidden="true"
-          viewbox="0 0 12 12"
-        >
-          <polyline
-            points="0.5 3.5 6 9.5 11.5 3.5"
-            fill="none"
-            stroke-width="1"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></polyline>
-        </svg>
-      </button>
       <div class="subnav__wrapper js-subnav__wrapper">
-        <nav class="subnav__nav justify-center">
-          <button
-            class="reset subnav__close-btn js-subnav__close-btn js-tab-focus"
-            aria-label="Close navigation"
-          >
-            <svg class="icon" viewbox="0 0 16 16">
-              <g
-                stroke-width="1"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-miterlimit="10"
-              >
-                <line x1="13.5" y1="2.5" x2="2.5" y2="13.5"></line>
-                <line x1="2.5" y1="2.5" x2="13.5" y2="13.5"></line>
-              </g>
-            </svg>
-          </button>
+        <nav class="subnav__nav justify-left">
           <ul class="subnav__list">
             <li class="subnav__item">
               <a class="subnav__link" href="#0" aria-current="page">Intro</a>
@@ -78,18 +41,6 @@ if(!('CSS' in window) || !CSS.supports('color', 'var(--color-var)')) {var cfStyl
             </li>
             <li class="subnav__item">
               <a class="subnav__link" href="#0">Buy</a>
-            </li>
-            <li class="subnav__item">
-              <a class="subnav__link" href="#0" aria-current="page">Intro</a>
-            </li>
-            <li class="subnav__item">
-              <a class="subnav__link" href="#0">Features</a>
-            </li>
-            <li class="subnav__item">
-              <a class="subnav__link" href="#0">Photos</a>
-            </li>
-            <li class="subnav__item">
-              <a class="subnav__link" href="#0">Videos</a>
             </li>
           </ul>
         </nav>

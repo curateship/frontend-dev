@@ -153,6 +153,32 @@ if(!('CSS' in window) || !CSS.supports('color', 'var(--color-var)')) {var cfStyl
                   ></path>
                 </g></svg
             ></a>
+
+            <div class="header-v2__nav-dropdown">
+              <ul class="header-v2__nav-list">
+                <li class="header-v2__nav-item">
+                  <a class="header-v2__nav-link" href="#0">Sub Item One</a>
+                </li>
+                <li class="header-v2__nav-item">
+                  <a class="header-v2__nav-link justify-between" href="#0">
+                    <span>Sub Item Two<i class="sr-only">(opens in new window)</i></span>
+                    <svg class="icon icon--xxs" aria-hidden="true" viewbox="0 0 12 12"><g stroke-width="1" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M11.5,8.5v2a1,1,0,0,1-1,1h-9a1,1,0,0,1-1-1v-9a1,1,0,0,1,1-1h2"></path><polyline points="6.5 0.5 11.5 0.5 11.5 5.5"></polyline><line x1="11.5" y1="0.5" x2="5.5" y2="6.5"></line></g>
+                    </svg>
+                  </a>
+                </li>
+                <li
+                  class="header-v2__nav-item header-v2__nav-item--divider"
+                  role="separator"
+                ></li>
+                <li class="header-v2__nav-item header-v2__nav-item--label">
+                  Label
+                </li>
+                <li class="header-v2__nav-item">
+                  <a class="header-v2__nav-link" href="#0">Sub Item Four</a>
+                </li>
+              </ul>
+            </div>
+
             <div class="header-v2__nav-dropdown">
               <ul class="header-v2__nav-list">
                 <li class="header-v2__nav-item">
@@ -196,6 +222,7 @@ if(!('CSS' in window) || !CSS.supports('color', 'var(--color-var)')) {var cfStyl
                 </li>
               </ul>
             </div>
+
           </li>
           <li class="header-v2__nav-item header-v2__nav-item--main">
             <a class="header-v2__nav-link" href="#0">Log in</a>

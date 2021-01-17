@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    document.getElementsByTagName("html")[0].className += " js";
+  </script>
+  <link id="codyframe" rel="stylesheet" href="assets/css/style.css" />
+  <!-- Uncomment the script below if you need to support browsers where CSS Variables have not been implemented (e.g., IE11)-->
+  <!--<script>
+if(!('CSS' in window) || !CSS.supports('color', 'var(--color-var)')) {var cfStyle = document.getElementById('codyframe');if(cfStyle) {var href = cfStyle.getAttribute('href');href = href.replace('style.css', 'style-fallback.css');cfStyle.setAttribute('href', href);}}
+</script>-->
+  <title>Get Started | CodyFrame</title>
+</head>
+<div class="container max-width-lg">
+    <div class="margin-top-md margin-bottom-md">
+
+        <div class="input-group file-upload inline-block">
+            <label for="upload2" class="file-upload__label btn btn--subtle">
+              <span class="flex items-center">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><path  stroke-linecap="square" stroke-linejoin="miter" d="M2 16v6h20v-6"></path><path stroke-linejoin="miter" stroke-linecap="butt" d="M12 17V2"></path><path stroke-linecap="square" stroke-linejoin="miter" d="M18 8l-6-6-6 6"></path></g></svg>
+                <span class="margin-left-xxs file-upload__text file-upload__text--has-max-width">Upload</span>
+              </span>
+            </label> 
+            <input type="file" class="file-upload__input" name="upload2" id="upload2" multiple>
+        <button class="btn btn--accent">Delete Cover</button>
+        <button class="btn btn--primary">Save</button>
+      </div>
+    </div>
+
+</div>
+<script src="assets/js/scripts.js"></script>
