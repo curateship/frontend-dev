@@ -53,6 +53,18 @@
   }
 }
 
+.subnav__link {
+  padding: var(--space-sm);
+
+  &:hover {
+    color: var(--color-contrast-high);
+  }
+
+  &[aria-current="page"] {
+    border-bottom-color: var(--color-primary); // border color
+    color: var(--color-contrast-high);
+  }
+}
 // --------------------------------
 
 // (END) Global editor code

@@ -14,108 +14,11 @@
   }
 }
 
-.speciall {
-  .header-v2__nav-ite {
-    position: relative;
-  }
-
-  .header-v2__nav-dropdow .header-v2__nav-lin,
-  .header-v2__nav-dropdow .header-v2__nav-item--labe {
-    padding-left: var(--space-sm);
-    padding-right: var(--space-sm);
-  }
-
-  .header-v2__nav-dropdow .header-v2__nav-lin {
-    display: flex;
-    align-items: center;
-    padding: var(--space-xs);
-    text-decoration: none;
-    color: var(--color-contrast-high);
-  }
-
-  .header-v2__nav-item--labe {
-    text-transform: uppercase;
-    font-size: 0.6em;
-    letter-spacing: 0.1em;
-    color: var(--color-contrast-medium);
-    padding: var(--space-xxs) 0;
-  }
-
-  .header-v2__nav-dropdow .header-v2__nav-item--divider {
-    margin: var(--space-xs) 0;
-  }
-
-  .header-v2__nav-list--is-visible,
-  .header-v2__nav-item--has-children:hover > .header-v2__nav-dropdow {
-    visibility: visible;
-    opacity: 1;
-  }
-
-  .header-v2__nav-item--mai > .header-v2__nav-dropdow {
-    font-size: 0.9em;
-  }
-  .header-v2__nav-dropdow {
-    --space-unit: 1rem;
-    position: absolute;
-    top: 135%;
-    left: calc(50% - 170px);
-    z-index: var(--zindex-popover);
-    width: 200px;
-    background-color: var(--color-bg);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-md);
-    padding: var(--space-xs) 0;
-    transition: opacity 0.2s, visibility 0.2s;
-    visibility: hidden;
-    opacity: 0;
-  }
-
-  .header-v2__nav-dropdown-ico {
-    display: block;
-  }
-
-  .header-v2__nav-item--mai > .header-v2__nav-lin {
-    padding: var(--space-xxs) 0;
-  }
-
-  .header-v2__nav-item--mai {
-    display: inline-block;
-    margin-bottom: 0;
-    margin-left: var(--space-md);
-  }
-
-  .header-v2__nav-ite {
-    position: relative;
-  }
-}
-
-@media (min-width: 1280px) {
-  .speciall {
-    display: none;
-  }
-}
-
-@media (max-width: 1279px) {
-  .speciall {
-    position: absolute;
-    top: 1rem;
-    right: 5rem;
-    z-index: 99;
-  }
-  .to-be-hidden {
-    display: none;
-  }
-}
-
 .centered-img {
   position: relative;
-  top: -50%;
+  top: -30%;
 }
-.header-v2__nav-lin {
-  position: relative;
-  top: 4px;
-  margin-right: 0.5rem;
-}
+
 .sidenav__counter {
   margin-left: 0.5rem !important;
 }
